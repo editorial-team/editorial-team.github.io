@@ -12,6 +12,7 @@
 .buy-art img { width: 190px; margin-bottom: -50px; filter: drop-shadow(0 24px 30px rgba(0,0,0,.5)); }
 .buy-copy { display: grid; gap: 20px; justify-items: start; padding: 56px 40px 60px; }
 .buy-t { font-size: 76px; }
+.buy-sub { margin-top: -10px; font-size: 24px; color: var(--a); }
 .inc { display: grid; gap: 12px; margin: 6px 0 0; padding: 0; list-style: none; font-size: 18px; }
 .inc li { display: flex; align-items: center; gap: 12px; }
 .inc i { position: relative; flex: none; width: 18px; height: 18px; border: 1px solid var(--a); }
@@ -144,3 +145,4 @@
 .ty-steps .num { color: var(--a); font-size: 13px; }
 .ty-mail { justify-self: start; margin-top: -14px; font-size: 18px; color: var(--a); border-bottom: 1px solid currentColor; }
 @media (max-width: 900px) { .pg-thanks .ty { order: -1; border-bottom: 1px solid var(--line); } .ty .buy-t { font-size: 52px; } .paid { font-size: 19px; } .paid .tx:last-child { font-size: 32px; } }
+@media (max-width: 900px) { .pg-buy .buy-copy .buy-t { font-size: min(54px, 13.5vw); } .buy-sub { margin-top: -6px; font-size: min(24px, 4.6vw); } }
