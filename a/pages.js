@@ -5,7 +5,25 @@ var ET_PAY = {
   clip: 'https://pay.sumit.co.il/kr8wxv/15ivzam/15ivzan/payment/',
   bundle: 'https://pay.sumit.co.il/kr8wxv/15iw0kg/15iw0kh/payment/'
 };
-window.etPay = function (plan) { if (ET_PAY[plan]) location.href = ET_PAY[plan]; };
+var ET_PLAN = { film: ['CinemaScript', 130], clip: ['ClipScript', 130], bundle: ['Cinema+Clip Script', 200] };
+// Google Sheet web app (build/sheets-apps-script.gs); rows are skipped while this is empty.
+var ET_SHEET = 'https://script.google.com/macros/s/AKfycbzMhvmJgLoKtSJ3l0ZTgI5_7Z6uCRhrBnAD0p31-mJnlEbE6L_S-tD_DPDPe1Ual3Np_Q/exec';
+
+function etLog(status, plan, d, extra) {
+  if (!ET_SHEET || !ET_PLAN[plan]) return;
+  var row = JSON.stringify({ status: status, name: d.name, email: d.email, news: d.news, product: ET_PLAN[plan][0], price: ET_PLAN[plan][1], extra: extra || '' });
+  var blob = new Blob([row], { type: 'text/plain' });
+  // sendBeacon survives the jump to the payment page; fetch is the fallback
+  if (!(navigator.sendBeacon && navigator.sendBeacon(ET_SHEET, blob))) fetch(ET_SHEET, { method: 'POST', body: row, mode: 'no-cors', keepalive: true });
+}
+
+window.etPay = function (plan, d) {
+  if (!ET_PAY[plan]) return;
+  // the thank-you page reads this back to log the paid row with the buyer's details
+  try { localStorage.setItem('etBuy', JSON.stringify({ plan: plan, name: d.name, email: d.email, news: d.news })); } catch (e) {}
+  etLog('עבר לתשלום', plan, d);
+  location.href = ET_PAY[plan];
+};
 (function () {
   var form = document.getElementById('buyForm');
   if (!form) return;
@@ -19,4 +37,14 @@ window.etPay = function (plan) { if (ET_PAY[plan]) location.href = ET_PAY[plan];
     else msg.dataset.m = 'soon';
   });
   form.addEventListener('input', function () { if (msg.dataset.m === 'miss') msg.dataset.m = ''; });
+})();
+
+// Thank-you page: log the paid row once, with whatever SUMIT added to the address.
+(function () {
+  if (!document.body.classList.contains('pg-thanks')) return;
+  var d = null;
+  try { d = JSON.parse(localStorage.getItem('etBuy')); localStorage.removeItem('etBuy'); } catch (e) {}
+  if (!d) return;
+  var plan = new URLSearchParams(location.search).get('p') || d.plan;
+  etLog('שולם', plan, d, location.search.slice(1));
 })();
