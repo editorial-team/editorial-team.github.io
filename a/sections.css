@@ -300,3 +300,7 @@
 /* the footer logo moves a little further right on wide screens only, so it never leaves the screen */
 .foot-logo { margin-right: calc(-9px - min(80px, max(0px, (100vw - 1540px) / 2))); }
 @media (max-width: 900px) { .foot-logo { margin-right: 0; } }
+
+/* product subtitle under the CinemaScript / ClipScript headings */
+.prod-sub { margin-top: -8px; font-size: clamp(18px, 1.8vw, 26px); }
+#film .prod-sub { color: #FF2338; } #clip .prod-sub { color: #E4A31F; }
