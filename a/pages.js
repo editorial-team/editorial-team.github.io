@@ -7,7 +7,7 @@ var ET_PAY = {
 };
 var ET_PLAN = { film: ['CinemaScript', 130], clip: ['ClipScript', 130], bundle: ['Cinema+Clip Script', 200] };
 // Google Sheet web app (build/sheets-apps-script.gs); rows are skipped while this is empty.
-var ET_SHEET = 'https://script.google.com/macros/s/AKfycbzMhvmJgLoKtSJ3l0ZTgI5_7Z6uCRhrBnAD0p31-mJnlEbE6L_S-tD_DPDPe1Ual3Np_Q/exec';
+var ET_SHEET = 'https://script.google.com/macros/s/AKfycbxs2PiHGnHfXBOIdooYSFRH4R5fTgykJIWWDOtribZ7Ppw-dT30nSfRHXT9yD9k2AhL/exec';
 
 function etLog(status, plan, d, extra) {
   if (!ET_SHEET || !ET_PLAN[plan]) return;
