@@ -22,6 +22,8 @@ window.etPay = function (plan, d) {
   // the thank-you page reads this back to log the paid row with the buyer's details
   try { localStorage.setItem('etBuy', JSON.stringify({ plan: plan, name: d.name, email: d.email, news: d.news })); } catch (e) {}
   etLog('עבר לתשלום', plan, d);
+  // GoatCounter event: how many reached the payment page, per package
+  try { window.goatcounter.count({ path: 'pay-' + plan, title: 'מעבר לתשלום', event: true }); } catch (e) {}
   location.href = ET_PAY[plan];
 };
 (function () {
