@@ -50,3 +50,46 @@ window.etPay = function (plan, d) {
   var plan = new URLSearchParams(location.search).get('p') || d.plan;
   etLog('שולם', plan, d, location.search.slice(1));
 })();
+
+// Survey page: survey.html?p=<plan>&t=<token> from the survey email; answers go to the "סקר" tab of the sheet.
+(function () {
+  var form = document.getElementById('svForm');
+  if (!form) return;
+  var qs = new URLSearchParams(location.search), plan = qs.get('p'), token = qs.get('t') || '';
+  var msg = document.getElementById('svMsg'), el = form.elements;
+  function setPlan(p) { if (ET_PLAN[p]) document.body.className = document.body.className.replace(/plan-\w+/, 'plan-' + p); }
+  if (ET_PLAN[plan]) { el.product.value = plan; setPlan(plan); }
+  function sync() {
+    // follow-up fields (data-if="name=value") open only for the answer they belong to
+    [].forEach.call(form.querySelectorAll('[data-if]'), function (f) {
+      var c = f.dataset.if.split('='); f.classList.toggle('on', el[c[0]].value === c[1]);
+    });
+  }
+  form.addEventListener('change', function (e) {
+    if (e.target.name === 'product') setPlan(e.target.value);
+    var q = e.target.closest('.q'); if (q) q.classList.remove('bad');
+    if (msg.dataset.m === 'miss') msg.dataset.m = '';
+    sync();
+  });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var missing = [].filter.call(form.querySelectorAll('.q[data-req]'), function (q) { return !q.querySelector('input:checked'); });
+    [].forEach.call(form.querySelectorAll('.q'), function (q) { q.classList.toggle('bad', missing.indexOf(q) >= 0); });
+    if (missing.length) { msg.dataset.m = 'miss'; missing[0].scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+    var a = { kind: 'survey', token: token, product: ET_PLAN[el.product.value][0] };
+    ['saves', 'hours', 'install', 'problem', 'problem_text', 'liked', 'improve', 'recommend', 'quote', 'quote_name', 'ideas', 'more'].forEach(function (k) {
+      a[k] = (el[k].value || '').trim();
+    });
+    if (a.problem !== 'כן') a.problem_text = '';
+    if (a.quote !== 'כן, עם השם שלי') a.quote_name = '';
+    msg.dataset.m = 'soon';
+    fetch(ET_SHEET, { method: 'POST', body: JSON.stringify(a), mode: 'no-cors', keepalive: true })
+      .catch(function () {})
+      .then(function () {
+        form.hidden = true;
+        var done = document.getElementById('svDone'); done.hidden = false;
+        done.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+  });
+  sync();
+})();

@@ -146,3 +146,40 @@
 .ty-mail { justify-self: start; margin-top: -14px; font-size: 18px; color: var(--a); border-bottom: 1px solid currentColor; }
 @media (max-width: 900px) { .pg-thanks .ty { order: -1; border-bottom: 1px solid var(--line); } .ty .buy-t { font-size: 52px; } .paid { font-size: 19px; } .paid .tx:last-child { font-size: 32px; } }
 @media (max-width: 900px) { .pg-buy .buy-copy .buy-t { font-size: min(54px, 13.5vw); } .buy-sub { margin-top: -6px; font-size: min(24px, 4.6vw); } }
+
+/* ---------- customer survey (survey.html, built by build/pages.py: survey) ---------- */
+.pg-survey { --mute: #B4B2AD; }
+.pg-survey .label { font-size: 15px; }
+.sv { max-width: 820px; margin: 0 auto; padding: 56px 40px 90px; }
+.sv-head { display: grid; gap: 20px; padding-bottom: 36px; border-bottom: 1px solid var(--line); }
+.sv-head .lp, .sv-done .lp { margin: 0; font-size: 18px; color: #BDBDB8; }
+.sv-form { display: grid; }
+.q { display: grid; gap: 16px; margin: 0; padding: 30px 0; border: 0; border-bottom: 1px solid var(--line); min-width: 0; }
+.q legend { float: right; width: 100%; display: flex; align-items: flex-start; gap: 14px; padding: 0; font-size: 20px; color: var(--ink); }
+.q legend .num { flex: none; margin-top: 4px; font-size: 13px; color: var(--a); }
+.q.bad legend { color: var(--a); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { position: relative; cursor: pointer; }
+.chip input { position: absolute; opacity: 0; pointer-events: none; }
+.chip span { display: grid; place-items: center; min-height: 48px; padding: 0 18px; font-size: 16px; color: var(--ink); background: #111; border: 1px solid #2A2A2A; transition: background .15s, border-color .15s, color .15s; }
+.chip:hover span { border-color: #555; }
+.chip input:focus-visible + span { outline: 2px solid var(--ink); outline-offset: 2px; }
+.chip input:checked + span { color: #050505; background: var(--a); border-color: var(--a); }
+.scale .chip span { width: 48px; padding: 0; }
+.sc { display: grid; gap: 10px; justify-self: start; }
+.ends { display: flex; justify-content: space-between; gap: 20px; font-size: 14px; color: var(--mute); }
+.sv textarea, .sv .fld input { width: 100%; padding: 14px 16px; font: 17px/1.5 system-ui, sans-serif; color: var(--ink); background: #111; border: 1px solid #2A2A2A; border-radius: 0; resize: vertical; box-sizing: border-box; }
+.sv .fld input { height: 52px; padding: 0 16px; }
+.sv textarea:focus, .sv .fld input:focus { outline: none; border-color: var(--a); }
+.fld.if { display: none; }
+.fld.if.on { display: grid; }
+.sv-form .pay-btn { margin-top: 34px; width: 100%; }
+.sv-form .pay-msg { margin-top: 14px; }
+.sv-done { display: grid; gap: 22px; justify-items: start; padding-top: 40px; }
+.sv-done[hidden] { display: none; }
+@media (max-width: 900px) {
+  .sv { padding: 36px 22px 70px; }
+  .q legend { font-size: 18px; }
+  .scale .chip span { width: 40px; min-height: 44px; }
+  .scale { gap: 6px; }
+}
